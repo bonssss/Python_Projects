@@ -4,8 +4,6 @@
 # •	Keeps looping until the user types “exit”.
 # •	Shows a summary at the end: number of completed tasks vs pending.
 
-
-
 tasks = []
 
 while True:
