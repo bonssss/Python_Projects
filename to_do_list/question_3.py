@@ -21,8 +21,10 @@ while True:
             "Enter task and priority (e.g., 'Buy milk - high'): "
         ).strip()
 
-        if " - " in task_input:
-            task, priority = task_input.split(" - ", 1)
+        if "-" in task_input:
+            task, priority = task_input.split("-", 1)
+            task = task.strip()
+            priority = priority.strip()
 
             if task and priority:
                 tasks.append({

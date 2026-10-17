@@ -19,16 +19,26 @@ while True:
     for item_id, details in groceries.items():
         print(f"{item_id}. {details['name'].capitalize()} - ${details['price']:.2f}")
 
-    choice = input("\nEnter item ID or 'checkout': ").strip().lower()
+    choice = input("\nEnter item name or ID (or 'checkout'): ").strip().lower()
 
     if choice == "checkout":
         break
 
-    if not choice.isdigit() or int(choice) not in groceries:
-        print("Invalid item ID. Please try again.")
+    # Look up item by name or by ID
+    matched_id = None
+    if choice.isdigit() and int(choice) in groceries:
+        matched_id = int(choice)
+    else:
+        for item_id, details in groceries.items():
+            if choice == details["name"].lower():
+                matched_id = item_id
+                break
+
+    if matched_id is None:
+        print("Invalid item. Please enter a valid item name or ID.")
         continue
 
-    item_id = int(choice)
+    item_id = matched_id
 
     while True:
         try:
@@ -50,19 +60,22 @@ while True:
 # Display final bill
 print("\n--- Final Bill ---")
 
-total = 0
+if not cart:
+    print("No items in cart.")
+else:
+    total = 0
+    for item_id, quantity in cart.items():
+        name = groceries[item_id]["name"]
+        price = groceries[item_id]["price"]
+        subtotal = price * quantity
 
-for item_id, quantity in cart.items():
-    name = groceries[item_id]["name"]
-    price = groceries[item_id]["price"]
-    subtotal = price * quantity
+        print(
+            f"{name.capitalize()}: {quantity} x "
+            f"${price:.2f} = ${subtotal:.2f}"
+        )
 
-    print(
-        f"{name.capitalize()}: {quantity} x "
-        f"${price:.2f} = ${subtotal:.2f}"
-    )
+        total += subtotal
 
-    total += subtotal
+    print(f"\nTotal: ${total:.2f}")
 
-print(f"\nTotal: ${total:.2f}")
 print("Thank you for shopping with us!")
